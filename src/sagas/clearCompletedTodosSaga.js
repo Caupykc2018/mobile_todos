@@ -1,11 +1,12 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { fetchClearCompletedTodos } from '../services/api/http/fetchClearCompletedTodos';
 import {
-  CLEAR_COMPLETED_TODOS, ERROR,
+  CLEAR_COMPLETED_TODOS,
+  ERROR,
   REFRESH_TOKEN,
   REMOVE_TODOS,
   SET_ERROR,
-  SET_NOTIFICATION
+  SET_NOTIFICATION,
 } from '../constants';
 
 const workerClearCompletedTodos = function* () {
@@ -19,8 +20,7 @@ const workerClearCompletedTodos = function* () {
         type: REFRESH_TOKEN,
         payload: { refetchType: CLEAR_COMPLETED_TODOS, refetchPayload: {} },
       });
-    }
-    else {
+    } else {
       yield put({ type: SET_ERROR, payload: { error: e } });
       yield put({
         type: SET_NOTIFICATION,
