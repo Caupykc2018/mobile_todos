@@ -1,4 +1,4 @@
-import {takeEvery, call, put, select} from 'redux-saga/effects';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { fetchGetAllTodos } from '../services/api/http/fetchGetAllTodos';
 import {
   ERROR,
@@ -6,18 +6,19 @@ import {
   INITIAL_TODOS,
   REFRESH_TOKEN,
   SET_ERROR,
-  SET_NOTIFICATION
+  SET_NOTIFICATION,
 } from '../constants';
-
 
 const workerGetAllTodos = function* () {
   try {
-    const { disableStart, disableEnd, start, end } = yield select(state => state.filters);
+    const { disableStart, disableEnd, start, end, search } = yield select(
+      (state) => state.filters,
+    );
 
-    const startDate = disableStart || start === ''? null: start;
-    const endDate = disableEnd || end === ''? null: end;
+    const startDate = disableStart || start === '' ? null : start;
+    const endDate = disableEnd || end === '' ? null : end;
 
-    const data = yield call(fetchGetAllTodos, {startDate, endDate});
+    const data = yield call(fetchGetAllTodos, { startDate, endDate, search });
 
     yield put({ type: INITIAL_TODOS, payload: { todos: data } });
   } catch (e) {
@@ -26,8 +27,7 @@ const workerGetAllTodos = function* () {
         type: REFRESH_TOKEN,
         payload: { refetchType: GET_ALL_TODOS, refetchPayload: {} },
       });
-    }
-    else {
+    } else {
       yield put({ type: SET_ERROR, payload: { error: e } });
       yield put({
         type: SET_NOTIFICATION,

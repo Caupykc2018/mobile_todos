@@ -2,6 +2,7 @@ import {
   SET_DISABLE_END_DATE,
   SET_DISABLE_START_DATE,
   SET_END_DATE,
+  SET_SEARCH_TEXT,
   SET_START_DATE,
 } from '../constants';
 
@@ -11,6 +12,7 @@ const filters = (
     disableStart: false,
     end: '',
     disableEnd: false,
+    search: '',
   },
   { type, payload },
 ) => {
@@ -23,6 +25,8 @@ const filters = (
       return { ...state, disableStart: payload.disabled };
     case SET_DISABLE_END_DATE:
       return { ...state, disableEnd: payload.disabled };
+    case SET_SEARCH_TEXT:
+      return { ...state, search: payload.text };
     default:
       return state;
   }

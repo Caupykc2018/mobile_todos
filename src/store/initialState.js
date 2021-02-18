@@ -11,6 +11,7 @@ const initialState = {
     disableStart: false,
     end: '',
     disableEnd: false,
+    search: '',
   },
 };
 
