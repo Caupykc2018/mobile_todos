@@ -10,6 +10,8 @@ target 'mobile_todos' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+
   target 'mobile_todosTests' do
     inherit! :complete
     # Pods for testing

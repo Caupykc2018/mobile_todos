@@ -19,7 +19,8 @@ const todos = (state = [], { type, payload }) => {
     case ADD_TODO:
       return [...state, payload.todo];
     case SET_TODO:
-      copyState[copyState.findIndex((todo) => todo.id === payload.todo.id)] = payload.todo;
+      copyState[copyState.findIndex((todo) => todo.id === payload.todo.id)] =
+        payload.todo;
 
       return copyState;
     case SET_TODOS:

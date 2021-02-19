@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AccountScreen } from '../screens/AccountScreen';
-import { MainHeader } from '../components/headers/MainHeader';
+import { DefaultHeader } from '../components/headers/DefaultHeader';
 
 const Stack = createStackNavigator();
 
@@ -12,7 +12,7 @@ export const AccountStack = () => {
         component={AccountScreen}
         name={'account'}
         options={{
-          header: () => <MainHeader title={'Account'} />,
+          header: () => <DefaultHeader title={'Account'} />,
         }}
       />
     </Stack.Navigator>

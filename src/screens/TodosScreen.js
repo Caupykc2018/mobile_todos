@@ -40,10 +40,10 @@ export const TodosScreen = () => {
   );
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.app}>
-          <TopMenu visibleElements={Boolean(viewTodos.length)} />
+    <View style={styles.container}>
+      <View style={styles.app}>
+        <TopMenu visibleElements={Boolean(viewTodos.length)} />
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             {viewTodos.map((todo) => (
               <Todo
@@ -55,9 +55,9 @@ export const TodosScreen = () => {
               />
             ))}
           </View>
-        </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
