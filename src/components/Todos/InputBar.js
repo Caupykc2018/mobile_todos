@@ -1,13 +1,18 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { useDispatch } from 'react-redux';
-import { createTodo, toggleStatusAllTodos } from '../../actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { createTodo, updateTodos } from '../../actions';
 
 export const InputBar = ({ visibleElements, setIsSearch }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const inputRef = useRef();
+
+  const todos = useSelector((state) => state.todos);
+  const activeTodos = useMemo(() => todos.filter((todo) => !todo.isCompleted), [
+    todos,
+  ]);
 
   const handleOnChangeTextInput = useCallback((text) => {
     setTitle(text);
@@ -19,8 +24,15 @@ export const InputBar = ({ visibleElements, setIsSearch }) => {
   }, [title]);
 
   const handleOnClickToggleAll = useCallback(() => {
-    dispatch(toggleStatusAllTodos());
-  }, []);
+    const editingTodos = activeTodos.length ? activeTodos : todos;
+
+    dispatch(
+      updateTodos(
+        editingTodos.map((todo) => todo.id),
+        Boolean(activeTodos.length),
+      ),
+    );
+  }, [activeTodos, todos]);
 
   const handleOnPressSearch = useCallback(() => {
     setIsSearch(true);
@@ -40,6 +52,7 @@ export const InputBar = ({ visibleElements, setIsSearch }) => {
               name="chevron-down"
               forceTextInputFocus={false}
               onPress={handleOnClickToggleAll}
+              color={activeTodos.length ? 'black' : 'lightgray'}
             />
           )
         }

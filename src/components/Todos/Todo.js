@@ -17,19 +17,19 @@ import { useMemo } from 'react';
 
 export const Todo = ({ id, title, isCompleted, createdAt }) => {
   const [showModal, setShowModal] = useState(false);
-  const { edittingTodo, setEdittingTodo, editTitle } = useContext(
-    EditTodoContext,
-  );
+  const { editingTodo, setEditingTodo } = useContext(EditTodoContext);
 
   const dispatch = useDispatch();
 
-  const isCurrentTodoEdit = useMemo(() => edittingTodo?.id === id);
+  const isCurrentTodoEdit = useMemo(() => editingTodo?.id === id, [
+    editingTodo,
+  ]);
   const colorListItem = useMemo(() => {
-    if ((Boolean(edittingTodo) && !isCurrentTodoEdit) || !edittingTodo) {
+    if ((Boolean(editingTodo) && isCurrentTodoEdit) || !editingTodo) {
       return 'white';
     }
     return 'lightgray';
-  }, [edittingTodo, isCurrentTodoEdit]);
+  }, [editingTodo, isCurrentTodoEdit]);
 
   const handleOnChangeToggle = useCallback(
     () => dispatch(toggleStatusTodo(id, !isCompleted)),
@@ -41,7 +41,7 @@ export const Todo = ({ id, title, isCompleted, createdAt }) => {
   }, []);
 
   const handleOnPressEdit = useCallback(() => {
-    setEdittingTodo({ id, title });
+    setEditingTodo({ id, title });
     setShowModal(false);
   }, []);
 
@@ -54,7 +54,7 @@ export const Todo = ({ id, title, isCompleted, createdAt }) => {
       <TouchableOpacity
         onLongPress={() => setShowModal(true)}
         onPress={handleOnChangeToggle}
-        disabled={Boolean(edittingTodo)}>
+        disabled={Boolean(editingTodo)}>
         <List.Item
           style={[
             styles.container,

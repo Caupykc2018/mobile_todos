@@ -8,10 +8,10 @@ import { EditTodoContext } from '../../context/editTodo/editTodoContext';
 
 export const TopMenu = ({ visibleElements }) => {
   const [isSearch, setIsSearch] = useState(false);
-  const { edittingTodo } = useContext(EditTodoContext);
+  const { editingTodo } = useContext(EditTodoContext);
 
   const currentInputBar = useMemo(() => {
-    if (edittingTodo) {
+    if (editingTodo) {
       return <EditBar />;
     } else {
       if (isSearch) {
@@ -25,7 +25,7 @@ export const TopMenu = ({ visibleElements }) => {
         );
       }
     }
-  }, [edittingTodo, isSearch, visibleElements]);
+  }, [editingTodo, isSearch, visibleElements]);
 
   return <View>{currentInputBar}</View>;
 };

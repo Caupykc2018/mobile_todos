@@ -1,9 +1,11 @@
-import React, { useCallback, useState, useContext } from 'react';
+import React, { useCallback, useState, useContext, useEffect } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { TextInput, Portal, Dialog, Button } from 'react-native-paper';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { EditTodoContext } from '../../context/editTodo/editTodoContext';
+import { useDispatch } from 'react-redux';
+import { editTitleTodo } from '../../actions';
 
 const schemaValidation = Yup.object().shape({
   title: Yup.string()
@@ -14,7 +16,9 @@ const schemaValidation = Yup.object().shape({
 
 export const EditBar = () => {
   const [showModal, setShowModal] = useState(false);
-  const { setEdittingTodo } = useContext(EditTodoContext);
+  const { editingTodo, setEditingTodo } = useContext(EditTodoContext);
+
+  const dispatch = useDispatch();
 
   const { values, errors, handleChange } = useFormik({
     initialValues: {
@@ -22,6 +26,12 @@ export const EditBar = () => {
     },
     validationSchema: schemaValidation,
   });
+
+  useEffect(() => {
+    if (editingTodo) {
+      handleChange('title')(editingTodo.title);
+    }
+  }, [editingTodo]);
 
   const handleOnClickDeleteChanges = useCallback(() => {
     setShowModal(true);
@@ -32,9 +42,14 @@ export const EditBar = () => {
   }, []);
 
   const handleOnPressConfirmDelete = useCallback(() => {
-    setEdittingTodo(null);
+    setEditingTodo(null);
     setShowModal(false);
   }, []);
+
+  const handleOnPressEdit = useCallback(() => {
+    dispatch(editTitleTodo(editingTodo.id, values.title));
+    setEditingTodo(null);
+  }, [values.title]);
 
   return (
     <>
@@ -49,16 +64,15 @@ export const EditBar = () => {
           <TextInput.Icon
             name="pencil"
             color={values.title ? 'green' : 'lightgray'}
+            onPress={handleOnPressEdit}
           />
         }
         right={
-          Boolean(values.title) && (
-            <TextInput.Icon
-              name="backspace-outline"
-              color="red"
-              onPress={handleOnClickDeleteChanges}
-            />
-          )
+          <TextInput.Icon
+            name="backspace-outline"
+            color="red"
+            onPress={handleOnClickDeleteChanges}
+          />
         }
       />
       <Portal>
