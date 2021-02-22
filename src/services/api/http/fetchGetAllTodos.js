@@ -21,10 +21,7 @@ export const fetchGetAllTodos = async ({ startDate, endDate, search }) => {
   const response = await configuredFetch(
     `/api/todos${stringQueries === '?' ? '' : stringQueries}`,
     'GET',
-    {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    null,
   );
 
   const data = await response.json();

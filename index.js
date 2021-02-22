@@ -7,6 +7,7 @@ import { name as appName } from './app.json';
 import { store, persistor } from './src/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { LoadingScreen } from './src/screens/LoadingScreen';
+import { ViewTodosState } from './src/context/viewTodos/ViewTodosState';
 import { EditTodoState } from './src/context/editTodo/EditTodoState';
 
 function Main() {
@@ -14,9 +15,11 @@ function Main() {
     <StoreProvider store={store}>
       <PersistGate loading={<LoadingScreen />} persistor={persistor}>
         <PaperProvider>
-          <EditTodoState>
-            <App />
-          </EditTodoState>
+          <ViewTodosState>
+            <EditTodoState>
+              <App />
+            </EditTodoState>
+          </ViewTodosState>
         </PaperProvider>
       </PersistGate>
     </StoreProvider>

@@ -14,7 +14,7 @@ const configureStore = () => {
     {
       key: 'currentUser',
       storage: AsyncStorage,
-      whitelist: ['currentUser'],
+      whitelist: ['currentUser', 'currentTab'],
     },
     rootReducer,
   );

@@ -1,31 +1,20 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { View, ScrollView } from 'react-native';
 import { Todo } from '../components/Todos/Todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllTodos, refreshToken } from '../actions';
-import { ACTIVE, ALL, COMPLETED } from '../constants';
 import { TopMenu } from '../components/Todos/TopMenu';
 import { useDebounce } from '../hooks/useDebounce';
+import { FormOption } from '../components/Todos/FormOption';
+import { todosScreenStyles } from './utils/styles';
+import { ViewTodosContext } from '../context/viewTodos/viewTodosContext';
 
 export const TodosScreen = () => {
+  const { viewTodos } = useContext(ViewTodosContext);
+
   const dispatch = useDispatch();
 
-  const login = useSelector((state) => state.currentUser.login);
-  const currentTab = useSelector((state) => state.currentTab[login]);
   const filters = useSelector((state) => state.filters);
-
-  const viewTodos = useSelector((state) => {
-    switch (currentTab) {
-      case ALL:
-        return state.todos;
-      case ACTIVE:
-        return state.todos.filter((todo) => !todo.isCompleted);
-      case COMPLETED:
-        return state.todos.filter((todo) => todo.isCompleted);
-      default:
-        return state.todos;
-    }
-  });
 
   useEffect(() => {
     dispatch(refreshToken());
@@ -40,8 +29,9 @@ export const TodosScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.app}>
+    <View style={todosScreenStyles.container}>
+      <View style={todosScreenStyles.app}>
+        <FormOption />
         <TopMenu visibleElements={Boolean(viewTodos.length)} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View>
@@ -60,13 +50,3 @@ export const TodosScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    paddingTop: 15,
-  },
-  app: {
-    width: '90%',
-  },
-});

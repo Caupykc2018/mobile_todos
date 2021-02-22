@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useContext } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import {
   Button,
   Checkbox,
@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { deleteTodo, toggleStatusTodo } from '../../actions';
 import { EditTodoContext } from '../../context/editTodo/editTodoContext';
 import { useMemo } from 'react';
+import { todoStyles, todoDynamicStyle } from './utils/styles';
 
 export const Todo = ({ id, title, isCompleted, createdAt }) => {
   const [showModal, setShowModal] = useState(false);
@@ -43,7 +44,7 @@ export const Todo = ({ id, title, isCompleted, createdAt }) => {
   const handleOnPressEdit = useCallback(() => {
     setEditingTodo({ id, title });
     setShowModal(false);
-  }, []);
+  }, [id, title]);
 
   const handleOnDismiss = useCallback(() => {
     setShowModal(false);
@@ -57,15 +58,17 @@ export const Todo = ({ id, title, isCompleted, createdAt }) => {
         disabled={Boolean(editingTodo)}>
         <List.Item
           style={[
-            styles.container,
+            todoStyles.container,
             {
               backgroundColor: colorListItem,
             },
           ]}
-          title={<Text style={dynamicStyle(isCompleted).title}>{title}</Text>}
+          title={
+            <Text style={todoDynamicStyle(isCompleted).title}>{title}</Text>
+          }
           description={moment(createdAt).calendar()}
           left={() => (
-            <View style={styles.containerCheckbox}>
+            <View style={todoStyles.containerCheckbox}>
               <Checkbox status={isCompleted ? 'checked' : 'unchecked'} />
             </View>
           )}
@@ -78,7 +81,7 @@ export const Todo = ({ id, title, isCompleted, createdAt }) => {
             <Button
               color="green"
               mode="outlined"
-              style={styles.buttonAction}
+              style={todoStyles.buttonAction}
               onPress={handleOnPressEdit}>
               <Text>Edit</Text>
               <Icon name="pencil" size={20} onPress={() => null} />
@@ -86,7 +89,7 @@ export const Todo = ({ id, title, isCompleted, createdAt }) => {
             <Button
               color="red"
               mode="outlined"
-              style={styles.buttonAction}
+              style={todoStyles.buttonAction}
               onPress={handleOnClickDelete}>
               <Text>Delete</Text>
               <Icon name="delete" size={20} />
@@ -102,26 +105,3 @@ export const Todo = ({ id, title, isCompleted, createdAt }) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-  },
-  containerCheckbox: {
-    justifyContent: 'center',
-  },
-  containerButtonDelete: {
-    justifyContent: 'center',
-  },
-  buttonAction: {
-    marginTop: 10,
-  },
-});
-
-const dynamicStyle = (isCompleted) =>
-  StyleSheet.create({
-    title: {
-      textDecorationLine: isCompleted ? 'line-through' : 'none',
-      color: isCompleted ? 'gray' : 'black',
-    },
-  });

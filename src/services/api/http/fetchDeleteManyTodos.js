@@ -2,17 +2,9 @@ import { configuredFetch } from './configuredFetch';
 import { FetchError } from './fetchError';
 
 export const fetchDeleteManyTodos = async ({ todoIds }) => {
-  const response = await configuredFetch(
-    '/api/todos/',
-    'DELETE',
-    {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    {
-      todoIds,
-    },
-  );
+  const response = await configuredFetch('/api/todos/', 'DELETE', null, {
+    todoIds,
+  });
 
   const data = await response.json();
 

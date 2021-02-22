@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Appbar, Portal, Dialog, Button, Badge } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteTodos } from '../../actions';
+import { todoHeaderStyles } from './utils/styles';
 
 export const TodosHeader = () => {
   const [showModal, setShowModal] = useState(false);
@@ -43,12 +44,7 @@ export const TodosHeader = () => {
           <Dialog.Title>More actions</Dialog.Title>
           <Dialog.Content>
             <View>
-              <Badge
-                style={{
-                  position: 'absolute',
-                  top: -12,
-                  right: -8,
-                }}>
+              <Badge style={todoHeaderStyles.badge}>
                 {completedTodos.length}
               </Badge>
               <Button

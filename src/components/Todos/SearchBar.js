@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchText } from '../../actions';
+import { searchBarStyles } from './utils/styles';
 
 export const SearchBar = ({ setIsSearch }) => {
   const { search } = useSelector((state) => state.filters);
@@ -23,7 +23,7 @@ export const SearchBar = ({ setIsSearch }) => {
   return (
     <TextInput
       mode="outlined"
-      style={styles.input}
+      style={searchBarStyles.input}
       value={search}
       forceTextInputFocus={false}
       left={<TextInput.Icon name="arrow-left" onPress={handleOnPressClose} />}
@@ -39,9 +39,3 @@ export const SearchBar = ({ setIsSearch }) => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    backgroundColor: 'white',
-  },
-});

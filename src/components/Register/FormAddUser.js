@@ -1,47 +1,28 @@
 import React from 'react';
 import { Button, HelperText, TextInput } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
-import * as Yup from 'yup';
+import { View } from 'react-native';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { register } from '../../actions';
-
-const schemaValidation = Yup.object().shape({
-  login: Yup.string()
-    .min(3, 'Login must have at least 3 characters')
-    .max(16, 'The maximum login length is 16 characters')
-    .required('Required!'),
-  password: Yup.string()
-    .min(8, 'Password must have at least 8 characters')
-    .max(32, 'The maximum password length is 32 characters')
-    .required('Required!'),
-  repeatPassword: Yup.string()
-    .oneOf(
-      [Yup.ref('password')],
-      'Repeat password must be identical to password',
-    )
-    .required('Required!'),
-});
+import { formAddUserStyles } from './utils/styles';
+import { formAddUserValidation } from './utils/formik/validations';
+import { formAddUserInitialValues } from './utils/formik/initialValues';
 
 export const FormAddUser = () => {
   const dispatch = useDispatch();
 
   const { values, errors, handleSubmit, handleChange } = useFormik({
-    initialValues: {
-      login: '',
-      password: '',
-      repeatPassword: '',
-    },
-    validationSchema: schemaValidation,
+    initialValues: formAddUserInitialValues,
+    validationSchema: formAddUserValidation,
     onSubmit: (values) => {
       dispatch(register(values.login, values.password));
     },
   });
 
   return (
-    <View style={styles.container}>
+    <View style={formAddUserStyles.container}>
       <TextInput
-        style={styles.textField}
+        style={formAddUserStyles.textField}
         value={values.login}
         error={Boolean(errors.login)}
         label="Login"
@@ -54,7 +35,7 @@ export const FormAddUser = () => {
         </HelperText>
       )}
       <TextInput
-        style={styles.textField}
+        style={formAddUserStyles.textField}
         value={values.password}
         error={Boolean(errors.password)}
         label="Password"
@@ -68,7 +49,7 @@ export const FormAddUser = () => {
         </HelperText>
       )}
       <TextInput
-        style={styles.textField}
+        style={formAddUserStyles.textField}
         value={values.repeatPassword}
         error={Boolean(errors.repeatPassword)}
         label="Password"
@@ -81,9 +62,9 @@ export const FormAddUser = () => {
           {errors.repeatPassword}
         </HelperText>
       )}
-      <View style={styles.buttonContainer}>
+      <View style={formAddUserStyles.buttonContainer}>
         <Button
-          style={styles.buttonSubmit}
+          style={formAddUserStyles.buttonSubmit}
           mode="contained"
           onPress={handleSubmit}>
           Submit
@@ -92,28 +73,3 @@ export const FormAddUser = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  form: {
-    backgroundColor: 'white',
-    width: '80%',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'gray',
-    padding: 20,
-    borderRadius: 5,
-  },
-  textField: {
-    backgroundColor: 'white',
-  },
-  container: {
-    marginBottom: 20,
-  },
-  buttonSubmit: {
-    width: '50%',
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    marginTop: 15,
-  },
-});

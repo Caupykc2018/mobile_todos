@@ -6,7 +6,7 @@ import { EditBar } from './EditBar';
 import { useContext } from 'react';
 import { EditTodoContext } from '../../context/editTodo/editTodoContext';
 
-export const TopMenu = ({ visibleElements }) => {
+export const TopMenu = () => {
   const [isSearch, setIsSearch] = useState(false);
   const { editingTodo } = useContext(EditTodoContext);
 
@@ -17,15 +17,10 @@ export const TopMenu = ({ visibleElements }) => {
       if (isSearch) {
         return <SearchBar setIsSearch={setIsSearch} />;
       } else {
-        return (
-          <InputBar
-            visibleElements={visibleElements}
-            setIsSearch={setIsSearch}
-          />
-        );
+        return <InputBar setIsSearch={setIsSearch} />;
       }
     }
-  }, [editingTodo, isSearch, visibleElements]);
+  }, [editingTodo, isSearch]);
 
   return <View>{currentInputBar}</View>;
 };

@@ -1,32 +1,26 @@
 import React from 'react';
 import { Button, HelperText, TextInput } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { login } from '../../actions';
-import * as Yup from 'yup';
 import { useFormik } from 'formik';
-
-const schemaValidation = Yup.object().shape({
-  login: Yup.string().required('Required!'),
-  password: Yup.string().required('Required!'),
-});
+import { formLoginStyles } from './utils/styles';
+import { formLoginValidation } from './utils/formik/validations';
+import { formLoginInitialValues } from './utils/formik/initialValues';
 
 export const FormLogin = () => {
   const dispatch = useDispatch();
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
-    initialValues: {
-      login: '',
-      password: '',
-    },
-    validationSchema: schemaValidation,
+    initialValues: formLoginInitialValues,
+    validationSchema: formLoginValidation,
     onSubmit: (values) => dispatch(login(values.login, values.password)),
   });
 
   return (
-    <View style={styles.container}>
+    <View style={formLoginStyles.container}>
       <TextInput
-        style={styles.textField}
+        style={formLoginStyles.textField}
         value={values.login}
         error={Boolean(errors.login)}
         label="Login"
@@ -39,7 +33,7 @@ export const FormLogin = () => {
         </HelperText>
       )}
       <TextInput
-        style={styles.textField}
+        style={formLoginStyles.textField}
         value={values.password}
         error={Boolean(errors.password)}
         label="Password"
@@ -52,9 +46,9 @@ export const FormLogin = () => {
           {errors.password}
         </HelperText>
       )}
-      <View style={styles.buttonContainer}>
+      <View style={formLoginStyles.buttonContainer}>
         <Button
-          style={styles.buttonSubmit}
+          style={formLoginStyles.buttonSubmit}
           mode="contained"
           onPress={handleSubmit}>
           Submit
@@ -63,28 +57,3 @@ export const FormLogin = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  form: {
-    backgroundColor: 'white',
-    width: '80%',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'gray',
-    padding: 20,
-    borderRadius: 5,
-  },
-  textField: {
-    backgroundColor: 'white',
-  },
-  container: {
-    marginBottom: 20,
-  },
-  buttonSubmit: {
-    width: '50%',
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    marginTop: 15,
-  },
-});

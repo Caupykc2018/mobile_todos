@@ -1,18 +1,19 @@
-import React, { useCallback, useState, useContext, useEffect } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React, {
+  useCallback,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react';
+import { Text } from 'react-native';
 import { TextInput, Portal, Dialog, Button } from 'react-native-paper';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { EditTodoContext } from '../../context/editTodo/editTodoContext';
 import { useDispatch } from 'react-redux';
 import { editTitleTodo } from '../../actions';
-
-const schemaValidation = Yup.object().shape({
-  title: Yup.string()
-    .trim()
-    .min(1, 'Title cannot be less than 1 letter')
-    .required('Title cannot be less than 1 letter'),
-});
+import { editBarStyles } from './utils/styles';
+import { editBarValidation } from './utils/formik/validations';
+import { editBarInitialValues } from './utils/formik/initialValues';
 
 export const EditBar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -20,22 +21,39 @@ export const EditBar = () => {
 
   const dispatch = useDispatch();
 
-  const { values, errors, handleChange } = useFormik({
-    initialValues: {
-      title: '',
+  const { values, errors, handleChange, handleSubmit } = useFormik({
+    initialValues: editBarInitialValues,
+    validationSchema: editBarValidation,
+    onSubmit: (values, { setSubmitting, setValues }) => {
+      if (values.title === editingTodo.title) {
+        setEditingTodo(null);
+      } else if (!values.title.trim()) {
+        return;
+      } else {
+        dispatch(editTitleTodo(editingTodo.id, values.title));
+        setEditingTodo(null);
+      }
     },
-    validationSchema: schemaValidation,
   });
 
+  const isEdited = useMemo(() => values.title !== editingTodo.title, [
+    values,
+    editingTodo,
+  ]);
+
   useEffect(() => {
-    if (editingTodo) {
+    if (editingTodo?.title) {
       handleChange('title')(editingTodo.title);
     }
   }, [editingTodo]);
 
   const handleOnClickDeleteChanges = useCallback(() => {
-    setShowModal(true);
-  });
+    if (isEdited) {
+      setShowModal(true);
+    } else {
+      setEditingTodo(null);
+    }
+  }, [isEdited]);
 
   const handleOnDismiss = useCallback(() => {
     setShowModal(false);
@@ -46,26 +64,23 @@ export const EditBar = () => {
     setShowModal(false);
   }, []);
 
-  const handleOnPressEdit = useCallback(() => {
-    dispatch(editTitleTodo(editingTodo.id, values.title));
-    setEditingTodo(null);
-  }, [values.title]);
-
   return (
     <>
       <TextInput
         mode="outlined"
-        style={styles.input}
+        style={editBarStyles.input}
         value={values.title}
         error={Boolean(errors.title)}
         label={errors.title}
         onChangeText={handleChange('title')}
+        onSubmitEditing={handleSubmit}
         left={
-          <TextInput.Icon
-            name="pencil"
-            color={values.title ? 'green' : 'lightgray'}
-            onPress={handleOnPressEdit}
-          />
+          isEdited && (
+            <TextInput.Icon
+              name="pencil"
+              color={errors.title ? 'red' : 'green'}
+            />
+          )
         }
         right={
           <TextInput.Icon
@@ -92,9 +107,3 @@ export const EditBar = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    backgroundColor: 'white',
-  },
-});

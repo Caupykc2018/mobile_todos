@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTodo, updateTodos } from '../../actions';
+import { inputBarStyles } from './utils/styles';
 
-export const InputBar = ({ visibleElements, setIsSearch }) => {
+export const InputBar = ({ setIsSearch }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const inputRef = useRef();
@@ -19,8 +20,12 @@ export const InputBar = ({ visibleElements, setIsSearch }) => {
   }, []);
 
   const handleOnSubmit = useCallback(() => {
-    dispatch(createTodo(title));
-    setTitle('');
+    if (title.trim()) {
+      dispatch(createTodo(title));
+      setTitle('');
+    } else {
+      setTitle('');
+    }
   }, [title]);
 
   const handleOnClickToggleAll = useCallback(() => {
@@ -39,15 +44,16 @@ export const InputBar = ({ visibleElements, setIsSearch }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={inputBarStyles.container}>
       <TextInput
-        style={styles.input}
+        style={inputBarStyles.input}
         mode="outlined"
+        keyboardAppearance="light"
         placeholder="What needs to be done?"
         ref={inputRef}
         value={title}
         left={
-          visibleElements && (
+          Boolean(todos.length) && (
             <TextInput.Icon
               name="chevron-down"
               forceTextInputFocus={false}
@@ -69,23 +75,3 @@ export const InputBar = ({ visibleElements, setIsSearch }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  input: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  button: {
-    height: 58,
-    width: 10,
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'black',
-  },
-});
