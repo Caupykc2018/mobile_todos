@@ -1,8 +1,18 @@
 import { configuredFetch } from './configuredFetch';
 import { FetchError } from './fetchError';
 
-export const fetchGetAllTodos = async ({ startDate, endDate, search }) => {
+export const fetchGetAllTodos = async ({
+  startDate,
+  endDate,
+  search,
+  sortCreatedAt,
+}) => {
   const filters = [];
+  const sorts = [];
+
+  if (sortCreatedAt) {
+    sorts.push(`sortCreatedAt=${sortCreatedAt}`);
+  }
 
   if (!search) {
     if (startDate) {
@@ -16,7 +26,7 @@ export const fetchGetAllTodos = async ({ startDate, endDate, search }) => {
     filters.push(`search=${search}`);
   }
 
-  const stringQueries = `?${filters.join('&')}`;
+  const stringQueries = `?${[...filters, ...sorts].join('&')}`;
 
   const response = await configuredFetch(
     `/api/todos${stringQueries === '?' ? '' : stringQueries}`,

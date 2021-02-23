@@ -20,6 +20,17 @@ export const buttonTabsStyles = StyleSheet.create({
   },
 });
 
+export const dataPickerStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 15,
+  },
+});
+
 export const editBarStyles = StyleSheet.create({
   input: {
     backgroundColor: 'white',

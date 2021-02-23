@@ -1,6 +1,8 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { fetchGetAllTodos } from '../services/api/http/fetchGetAllTodos';
 import {
+  ADD_TODOS,
+  CLEAR_TODOS,
   ERROR,
   GET_ALL_TODOS,
   INITIAL_TODOS,
@@ -15,12 +17,20 @@ const workerGetAllTodos = function* () {
       (state) => state.filters,
     );
 
+    const { sortCreatedAt } = yield select((state) => state.sorts);
+
     const startDate = disableStart || start === '' ? null : start;
     const endDate = disableEnd || end === '' ? null : end;
 
-    const data = yield call(fetchGetAllTodos, { startDate, endDate, search });
+    const data = yield call(fetchGetAllTodos, {
+      startDate,
+      endDate,
+      search,
+      sortCreatedAt,
+    });
 
-    yield put({ type: INITIAL_TODOS, payload: { todos: data } });
+    yield put({ type: CLEAR_TODOS });
+    yield put({ type: ADD_TODOS, payload: { todos: data } });
   } catch (e) {
     if (e.status === 401) {
       yield put({

@@ -5,6 +5,7 @@ import currentTab from './currentTab';
 import error from './error';
 import notification from './notification';
 import filters from './filters';
+import sorts from './sorts';
 
 export default combineReducers({
   todos,
@@ -13,4 +14,5 @@ export default combineReducers({
   error,
   notification,
   filters,
+  sorts,
 });

@@ -13,6 +13,9 @@ const initialState = {
     disableEnd: false,
     search: '',
   },
+  sorts: {
+    sortCreatedAt: '',
+  },
 };
 
 if (initialState.currentUser.token) {

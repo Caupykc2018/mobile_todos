@@ -22,6 +22,7 @@ import {
   TOGGLE_STATUS_TODO,
   UPDATE_TODOS,
   SET_SEARCH_TEXT,
+  SET_CREATED_AT_SORT,
 } from '../constants';
 
 export const login = (loginValue, password) => ({
@@ -130,4 +131,9 @@ export const setDisableEndDate = (disabled) => ({
 export const setSearchText = (text) => ({
   type: SET_SEARCH_TEXT,
   payload: { text },
+});
+
+export const setCreatedAtSort = (type) => ({
+  type: SET_CREATED_AT_SORT,
+  payload: { type },
 });

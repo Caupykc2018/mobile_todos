@@ -1,11 +1,13 @@
 import {
-  ADD_TODO,
+  ADD_TODO_BEGIN,
+  ADD_TODO_END,
   CLEAR_TODOS,
   INITIAL_TODOS,
   REMOVE_TODO,
   REMOVE_TODOS,
   SET_TODO,
   SET_TODOS,
+  ADD_TODOS,
 } from '../constants';
 
 const todos = (state = [], { type, payload }) => {
@@ -16,8 +18,12 @@ const todos = (state = [], { type, payload }) => {
       return payload.todos;
     case CLEAR_TODOS:
       return [];
-    case ADD_TODO:
+    case ADD_TODO_BEGIN:
+      return [payload.todo, ...state];
+    case ADD_TODO_END:
       return [...state, payload.todo];
+    case ADD_TODOS:
+      return [...state, ...payload.todos];
     case SET_TODO:
       copyState[copyState.findIndex((todo) => todo.id === payload.todo.id)] =
         payload.todo;

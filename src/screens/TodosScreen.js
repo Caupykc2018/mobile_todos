@@ -15,6 +15,7 @@ export const TodosScreen = () => {
   const dispatch = useDispatch();
 
   const filters = useSelector((state) => state.filters);
+  const sorts = useSelector((state) => state.sorts);
 
   useEffect(() => {
     dispatch(refreshToken());
@@ -25,7 +26,7 @@ export const TodosScreen = () => {
       dispatch(getAllTodos());
     },
     250,
-    [filters],
+    [filters, sorts],
   );
 
   return (
