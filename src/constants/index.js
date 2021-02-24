@@ -48,3 +48,6 @@ export const SET_CREATED_AT_SORT = 'SET_CREATED_AT_SORT';
 export const ASC = 'ASC';
 export const DESC = 'DESC';
 export const MAX_PAGE_SIZE_TODOS = 20;
+export const SET_IS_ALL_TODOS = 'SET_IS_ALL_TODOS';
+export const SET_LOADING_TODOS = 'SET_LOADING_TODOS';
+export const CLEAR_ALL_TODOS = 'CLEAR_ALL_TODOS';

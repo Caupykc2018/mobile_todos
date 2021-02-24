@@ -1,4 +1,4 @@
-import {takeEvery, call, put, select} from 'redux-saga/effects';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { fetchCreateTodo } from '../services/api/http/fetchCreateTodo';
 import {
   ADD_TODO,
@@ -14,31 +14,31 @@ const workerCreateTodo = function* ({ payload }) {
     const data = yield call(fetchCreateTodo, payload);
 
     const todo = data;
-    const { disableStart, disableEnd, start, end } = yield select(state => state.filters);
-    const startDate = disableStart || start === ''? null: new Date(start);
-    const endDate = disableEnd || end === ''? null: new Date(end);
+    const { disableStart, disableEnd, start, end } = yield select(
+      (state) => state.filters,
+    );
+    const startDate = disableStart || start === '' ? null : new Date(start);
+    const endDate = disableEnd || end === '' ? null : new Date(end);
     let compareStart = false;
     let compareEnd = false;
 
-    if(startDate) {
-      if(startDate <= todo.createdAt) {
+    if (startDate) {
+      if (startDate <= todo.createdAt) {
         compareStart = true;
       }
-    }
-    else {
-      compareStart = true
+    } else {
+      compareStart = true;
     }
 
-    if(endDate) {
-      if(endDate >= todo.createdAt) {
+    if (endDate) {
+      if (endDate >= todo.createdAt) {
         compareEnd = true;
       }
-    }
-    else {
-      compareEnd = true
+    } else {
+      compareEnd = true;
     }
 
-    if(compareStart && compareEnd) {
+    if (compareStart && compareEnd) {
       yield put({ type: ADD_TODO, payload: { todo: data } });
     }
   } catch (e) {
@@ -47,8 +47,7 @@ const workerCreateTodo = function* ({ payload }) {
         type: REFRESH_TOKEN,
         payload: { refetchType: CREATE_TODO, refetchPayload: payload },
       });
-    }
-    else {
+    } else {
       yield put({ type: SET_ERROR, payload: { error: e } });
       yield put({
         type: SET_NOTIFICATION,

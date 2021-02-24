@@ -6,6 +6,8 @@ import error from './error';
 import notification from './notification';
 import filters from './filters';
 import sorts from './sorts';
+import isAllTodos from './isAllTodos';
+import loadingTodos from './loadingTodos';
 
 export default combineReducers({
   todos,
@@ -15,4 +17,6 @@ export default combineReducers({
   notification,
   filters,
   sorts,
+  isAllTodos,
+  loadingTodos,
 });

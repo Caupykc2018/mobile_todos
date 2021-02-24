@@ -1,3 +1,4 @@
+import { MAX_PAGE_SIZE_TODOS } from '../../../constants';
 import { configuredFetch } from './configuredFetch';
 import { FetchError } from './fetchError';
 
@@ -6,9 +7,14 @@ export const fetchGetAllTodos = async ({
   endDate,
   search,
   sortCreatedAt,
+  countTodos,
 }) => {
   const filters = [];
   const sorts = [];
+  const pagination = [];
+
+  pagination.push(`take=${MAX_PAGE_SIZE_TODOS}`);
+  pagination.push(`skip=${countTodos}`);
 
   if (sortCreatedAt) {
     sorts.push(`sortCreatedAt=${sortCreatedAt}`);
@@ -26,7 +32,7 @@ export const fetchGetAllTodos = async ({
     filters.push(`search=${search}`);
   }
 
-  const stringQueries = `?${[...filters, ...sorts].join('&')}`;
+  const stringQueries = `?${[...filters, ...sorts, ...pagination].join('&')}`;
 
   const response = await configuredFetch(
     `/api/todos${stringQueries === '?' ? '' : stringQueries}`,

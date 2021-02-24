@@ -6,7 +6,7 @@ import {
   REFRESH_TOKEN,
   SET_ERROR,
   SET_NOTIFICATION,
-  SET_TODO
+  SET_TODO,
 } from '../constants';
 
 const workerEditTitleTodo = function* ({ payload }) {
@@ -20,8 +20,7 @@ const workerEditTitleTodo = function* ({ payload }) {
         type: REFRESH_TOKEN,
         payload: { refetchType: EDIT_TITLE_TODO, refetchPayload: payload },
       });
-    }
-    else {
+    } else {
       yield put({ type: SET_ERROR, payload: { error: e } });
       yield put({
         type: SET_NOTIFICATION,

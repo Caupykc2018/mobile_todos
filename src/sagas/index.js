@@ -1,5 +1,6 @@
 import { all } from 'redux-saga/effects';
 import { watchAddTodo } from './addTodoSaga';
+import { watchClearTodos } from './clearTodosSaga';
 import { watchLogin } from './loginSaga';
 import { watchRegister } from './registerSaga';
 import { watchLogOut } from './logOutSaga';
@@ -19,6 +20,7 @@ import { watchDeleteManyTodos } from './deleteManyTodosSaga';
 export default function* rootSaga() {
   yield all([
     watchAddTodo(),
+    watchClearTodos(),
     watchLogin(),
     watchRegister(),
     watchLogOut(),

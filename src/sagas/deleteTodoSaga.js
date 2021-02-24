@@ -6,7 +6,7 @@ import {
   REFRESH_TOKEN,
   REMOVE_TODO,
   SET_ERROR,
-  SET_NOTIFICATION
+  SET_NOTIFICATION,
 } from '../constants';
 
 const workerDeleteTodo = function* ({ payload }) {
@@ -20,8 +20,7 @@ const workerDeleteTodo = function* ({ payload }) {
         type: REFRESH_TOKEN,
         payload: { refetchType: DELETE_TODO, refetchPayload: payload },
       });
-    }
-    else {
+    } else {
       yield put({ type: SET_ERROR, payload: { error: e } });
       yield put({
         type: SET_NOTIFICATION,

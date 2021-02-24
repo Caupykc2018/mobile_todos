@@ -1,5 +1,5 @@
-import {configuredSocket} from './configuredSoket';
+import { configuredSocket } from './configuredSoket';
 
 export const authEmit = (id) => {
-  configuredSocket.emit('SET_ID_SOCKET', {id});
+  configuredSocket.emit('SET_ID_SOCKET', { id });
 };

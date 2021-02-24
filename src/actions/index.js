@@ -23,6 +23,9 @@ import {
   UPDATE_TODOS,
   SET_SEARCH_TEXT,
   SET_CREATED_AT_SORT,
+  SET_IS_ALL_TODOS,
+  CLEAR_TODOS,
+  CLEAR_ALL_TODOS,
 } from '../constants';
 
 export const login = (loginValue, password) => ({
@@ -136,4 +139,17 @@ export const setSearchText = (text) => ({
 export const setCreatedAtSort = (type) => ({
   type: SET_CREATED_AT_SORT,
   payload: { type },
+});
+
+export const setIsAllTodos = (flag) => ({
+  type: SET_IS_ALL_TODOS,
+  payload: { flag },
+});
+
+export const clearTodos = () => ({
+  type: CLEAR_TODOS,
+});
+
+export const clearAllTodos = () => ({
+  type: CLEAR_ALL_TODOS,
 });

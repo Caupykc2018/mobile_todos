@@ -16,6 +16,8 @@ const initialState = {
   sorts: {
     sortCreatedAt: '',
   },
+  isAllTodos: false,
+  loadingTodos: false,
 };
 
 if (initialState.currentUser.token) {

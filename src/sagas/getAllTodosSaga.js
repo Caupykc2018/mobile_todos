@@ -2,17 +2,21 @@ import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { fetchGetAllTodos } from '../services/api/http/fetchGetAllTodos';
 import {
   ADD_TODOS,
-  CLEAR_TODOS,
   ERROR,
   GET_ALL_TODOS,
-  INITIAL_TODOS,
   REFRESH_TOKEN,
   SET_ERROR,
   SET_NOTIFICATION,
+  MAX_PAGE_SIZE_TODOS,
+  SET_IS_ALL_TODOS,
+  SET_LOADING_TODOS,
 } from '../constants';
 
 const workerGetAllTodos = function* () {
   try {
+    yield put({ type: SET_LOADING_TODOS, payload: { flag: true } });
+    const todos = yield select((state) => state.todos);
+
     const { disableStart, disableEnd, start, end, search } = yield select(
       (state) => state.filters,
     );
@@ -27,10 +31,15 @@ const workerGetAllTodos = function* () {
       endDate,
       search,
       sortCreatedAt,
+      countTodos: todos.length,
     });
 
-    yield put({ type: CLEAR_TODOS });
+    if (MAX_PAGE_SIZE_TODOS !== data.length) {
+      yield put({ type: SET_IS_ALL_TODOS, payload: { flag: true } });
+    }
+
     yield put({ type: ADD_TODOS, payload: { todos: data } });
+    yield put({ type: SET_LOADING_TODOS, payload: { flag: false } });
   } catch (e) {
     if (e.status === 401) {
       yield put({
@@ -44,6 +53,7 @@ const workerGetAllTodos = function* () {
         payload: { notification: { message: e.message, type: ERROR } },
       });
     }
+    yield put({ type: SET_LOADING_TODOS, payload: { flag: false } });
   }
 };
 

@@ -139,4 +139,5 @@ export const todosScreenStyles = StyleSheet.create({
     marginTop: 10,
     width: '90%',
   },
+  listFooter: { flex: 1, justifyContent: 'center', paddingTop: 10 },
 });
