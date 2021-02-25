@@ -8,7 +8,7 @@ import {
   SET_CURRENT_USER,
   SET_ERROR,
   SET_NOTIFICATION,
-  SET_TAB
+  SET_TAB,
 } from '../constants';
 
 const workerLogin = function* ({ payload }) {
@@ -18,7 +18,9 @@ const workerLogin = function* ({ payload }) {
 
     yield put({ type: SET_CURRENT_USER, payload: { user: data } });
 
-    const isEmptyCurrentTab = yield select((state) => !state.currentTab[data.login]);
+    const isEmptyCurrentTab = yield select(
+      (state) => !state.currentTab[data.login],
+    );
 
     if (isEmptyCurrentTab) {
       yield put({ type: SET_TAB, payload: { login: data.login, tab: ALL } });
@@ -28,7 +30,7 @@ const workerLogin = function* ({ payload }) {
     yield put({
       type: SET_NOTIFICATION,
       payload: { notification: { message: e.message, type: ERROR } },
-    })
+    });
   }
 };
 
