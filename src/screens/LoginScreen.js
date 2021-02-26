@@ -1,26 +1,23 @@
 import React, { useCallback } from 'react';
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import { Button, Title } from 'react-native-paper';
 import { FormLogin } from '../components/Login/FormLogin';
 import { loginScreenStyles } from './utils/styles';
-import {
-  GoogleSigninButton,
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-community/google-signin';
+import { GoogleSigninButton } from '@react-native-community/google-signin';
+import { register } from 'react-native-app-auth';
+
+const config = {
+  issuer: 'https://accounts.google.com',
+  clientId:
+    '184682290791-3fs6sg7scbbi34k3of74nkbh9bck3pqn.apps.googleusercontent.com',
+  redirectUrl: 'com.mobile_todos:/callback',
+  scopes: ['openid', 'profile'],
+};
 
 export const LoginScreen = ({ navigation }) => {
   const handleOnPressSignInGoogle = useCallback(async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo === undefined);
-    } catch (e) {
-      if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert('Play services are not available');
-      }
-      console.log(e.message);
-    }
+    const auth = await register(config);
+    console.log(auth);
   }, []);
 
   return (
